@@ -21,14 +21,10 @@ mongoose.connect(MONGODB_URI);
 app.get("/scrape", function(req, res) {
     axios.get("http://www.espn.com/").then(function(response) {
       var $ = cheerio.load(response.data);
-      $("ul.headlineStack_listContainer").each(function(i, element) {
+      $("ul.headlineStack__list").each(function(i, element) {
         var result = {};
-        result.title = $(this)
-          .children("a")
-          .text();
-        result.link = $(this)
-          .children("a")
-          .attr("href");
+        result.title = $(this).children("a").text();
+        result.link = $(this).children("a").attr("href");
         db.Article.create(result)
           .then(function(dbArticle) {
             console.log(dbArticle);
